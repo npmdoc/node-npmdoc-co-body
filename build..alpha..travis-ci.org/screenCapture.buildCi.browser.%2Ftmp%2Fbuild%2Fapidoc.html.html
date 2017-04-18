@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/cojs/co-body#readme"
-
-    >co-body (v5.1.1)</a>
+    <a href="https://github.com/cojs/co-body#readme">co-body (v5.1.1)</a>
 </h1>
 <h4>request body parsing for co</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.co-body">module co-body</a><ol>
 
@@ -258,8 +251,8 @@
   if (typeis(req, textType)) return text(req, opts);
 
   // invalid
-  var type = req.headers[&#x27;content-type&#x27;] || &#x27;&#x27;;
-  var message = type ? &#x27;Unsupported content-type: &#x27; + type : &#x27;Missing content-type&#x27;;
+  var type = req.headers['content-type'] || '';
+  var message = type ? 'Unsupported content-type: ' + type : 'Missing content-type';
   var err = new Error(message);
   err.status = 415;
   return Promise.reject(err);
@@ -293,8 +286,8 @@
   if (typeis(req, textType)) return text(req, opts);
 
   // invalid
-  var type = req.headers[&#x27;content-type&#x27;] || &#x27;&#x27;;
-  var message = type ? &#x27;Unsupported content-type: &#x27; + type : &#x27;Missing content-type&#x27;;
+  var type = req.headers['content-type'] || '';
+  var message = type ? 'Unsupported content-type: ' + type : 'Missing content-type';
   var err = new Error(message);
   err.status = 415;
   return Promise.reject(err);
@@ -320,11 +313,11 @@
   if (queryString.allowDots === undefined) queryString.allowDots = true;
 
   // defaults
-  var len = req.headers[&#x27;content-length&#x27;];
-  var encoding = req.headers[&#x27;content-encoding&#x27;] || &#x27;identity&#x27;;
-  if (len &#x26;&#x26; encoding === &#x27;identity&#x27;) opts.length = ~~len;
-  opts.encoding = opts.encoding || &#x27;utf8&#x27;;
-  opts.limit = opts.limit || &#x27;56kb&#x27;;
+  var len = req.headers['content-length'];
+  var encoding = req.headers['content-encoding'] || 'identity';
+  if (len &amp;&amp; encoding === 'identity') opts.length = ~~len;
+  opts.encoding = opts.encoding || 'utf8';
+  opts.limit = opts.limit || '56kb';
   opts.qs = opts.qs || qs;
 
   // raw-body returns a Promise when no callback is specified
@@ -348,7 +341,7 @@
 var body = yield parse.json(req);
 
 // explicit limit
-var body = yield parse.json(req, { limit: &#x27;10kb&#x27; });
+var body = yield parse.json(req, { limit: '10kb' });
 
 // application/x-www-form-urlencoded
 var body = yield parse.<span class="apidocCodeKeywordSpan">form</span>(req);
@@ -375,11 +368,11 @@ var body = yield parse(req);
   opts = utils.clone(opts);
 
   // defaults
-  var len = req.headers[&#x27;content-length&#x27;];
-  var encoding = req.headers[&#x27;content-encoding&#x27;] || &#x27;identity&#x27;;
-  if (len &#x26;&#x26; encoding === &#x27;identity&#x27;) opts.length = len = ~~len;
-  opts.encoding = opts.encoding || &#x27;utf8&#x27;;
-  opts.limit = opts.limit || &#x27;1mb&#x27;;
+  var len = req.headers['content-length'];
+  var encoding = req.headers['content-encoding'] || 'identity';
+  if (len &amp;&amp; encoding === 'identity') opts.length = len = ~~len;
+  opts.encoding = opts.encoding || 'utf8';
+  opts.limit = opts.limit || '1mb';
   var strict = opts.strict !== false;
 
   // raw-body returns a promise when no callback is specified
@@ -404,7 +397,7 @@ var body = yield parse(req);
     if (!str) return {};
     // strict JSON test
     if (!strictJSONReg.test(str)) {
-      throw new Error(&#x27;invalid JSON, only supports object and array&#x27;);
+      throw new Error('invalid JSON, only supports object and array');
     }
     return JSON.parse(str);
   }
@@ -420,7 +413,7 @@ more options available via [raw-body](https://github.com/stream-utils/raw-body#g
 var body = yield parse.<span class="apidocCodeKeywordSpan">json</span>(req);
 
 // explicit limit
-var body = yield parse.json(req, { limit: &#x27;10kb&#x27; });
+var body = yield parse.json(req, { limit: '10kb' });
 
 // application/x-www-form-urlencoded
 var body = yield parse.form(req);
@@ -441,25 +434,25 @@ var body = yield parse.form(req);
   opts = utils.clone(opts);
 
   // defaults
-  var len = req.headers[&#x27;content-length&#x27;];
-  var encoding = req.headers[&#x27;content-encoding&#x27;] || &#x27;identity&#x27;;
-  if (len &#x26;&#x26; encoding === &#x27;identity&#x27;) opts.length = ~~len;
-  opts.encoding = opts.encoding || &#x27;utf8&#x27;;
-  opts.limit = opts.limit || &#x27;1mb&#x27;;
+  var len = req.headers['content-length'];
+  var encoding = req.headers['content-encoding'] || 'identity';
+  if (len &amp;&amp; encoding === 'identity') opts.length = ~~len;
+  opts.encoding = opts.encoding || 'utf8';
+  opts.limit = opts.limit || '1mb';
 
   // raw-body returns a Promise when no callback is specified
   return Promise.resolve()
     .then(function() {
       return raw(inflate(req), opts);
     })
-    .then(str =&#x3e; {
+    .then(str =&gt; {
       // ensure return the same format with json / form
       return opts.returnRawBody ? { parsed: str, raw: str } : str;
     });
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 // explicit limit
-var body = yield parse.json(req, { limit: &#x27;10kb&#x27; });
+var body = yield parse.json(req, { limit: '10kb' });
 
 // application/x-www-form-urlencoded
 var body = yield parse.form(req);
@@ -471,7 +464,7 @@ var body = yield parse.<span class="apidocCodeKeywordSpan">text</span>(req);
 var body = yield parse(req);
 
 // custom type
-var body = yield parse(req, { textTypes: [&#x27;text&#x27;, &#x27;html&#x27;] });
+var body = yield parse(req, { textTypes: ['text', 'html'] });
 ```
 ...</pre></li>
     </ul>
@@ -524,8 +517,8 @@ var body = yield parse(req, { textTypes: [&#x27;text&#x27;, &#x27;html&#x27;] })
   if (typeis(req, textType)) return text(req, opts);
 
   // invalid
-  var type = req.headers[&#x27;content-type&#x27;] || &#x27;&#x27;;
-  var message = type ? &#x27;Unsupported content-type: &#x27; + type : &#x27;Missing content-type&#x27;;
+  var type = req.headers['content-type'] || '';
+  var message = type ? 'Unsupported content-type: ' + type : 'Missing content-type';
   var err = new Error(message);
   err.status = 415;
   return Promise.reject(err);
@@ -551,11 +544,11 @@ var body = yield parse(req, { textTypes: [&#x27;text&#x27;, &#x27;html&#x27;] })
   if (queryString.allowDots === undefined) queryString.allowDots = true;
 
   // defaults
-  var len = req.headers[&#x27;content-length&#x27;];
-  var encoding = req.headers[&#x27;content-encoding&#x27;] || &#x27;identity&#x27;;
-  if (len &#x26;&#x26; encoding === &#x27;identity&#x27;) opts.length = ~~len;
-  opts.encoding = opts.encoding || &#x27;utf8&#x27;;
-  opts.limit = opts.limit || &#x27;56kb&#x27;;
+  var len = req.headers['content-length'];
+  var encoding = req.headers['content-encoding'] || 'identity';
+  if (len &amp;&amp; encoding === 'identity') opts.length = ~~len;
+  opts.encoding = opts.encoding || 'utf8';
+  opts.limit = opts.limit || '56kb';
   opts.qs = opts.qs || qs;
 
   // raw-body returns a Promise when no callback is specified
@@ -579,7 +572,7 @@ var body = yield parse(req, { textTypes: [&#x27;text&#x27;, &#x27;html&#x27;] })
 var body = yield parse.json(req);
 
 // explicit limit
-var body = yield parse.json(req, { limit: &#x27;10kb&#x27; });
+var body = yield parse.json(req, { limit: '10kb' });
 
 // application/x-www-form-urlencoded
 var body = yield parse.<span class="apidocCodeKeywordSpan">form</span>(req);
@@ -606,11 +599,11 @@ var body = yield parse(req);
   opts = utils.clone(opts);
 
   // defaults
-  var len = req.headers[&#x27;content-length&#x27;];
-  var encoding = req.headers[&#x27;content-encoding&#x27;] || &#x27;identity&#x27;;
-  if (len &#x26;&#x26; encoding === &#x27;identity&#x27;) opts.length = len = ~~len;
-  opts.encoding = opts.encoding || &#x27;utf8&#x27;;
-  opts.limit = opts.limit || &#x27;1mb&#x27;;
+  var len = req.headers['content-length'];
+  var encoding = req.headers['content-encoding'] || 'identity';
+  if (len &amp;&amp; encoding === 'identity') opts.length = len = ~~len;
+  opts.encoding = opts.encoding || 'utf8';
+  opts.limit = opts.limit || '1mb';
   var strict = opts.strict !== false;
 
   // raw-body returns a promise when no callback is specified
@@ -635,7 +628,7 @@ var body = yield parse(req);
     if (!str) return {};
     // strict JSON test
     if (!strictJSONReg.test(str)) {
-      throw new Error(&#x27;invalid JSON, only supports object and array&#x27;);
+      throw new Error('invalid JSON, only supports object and array');
     }
     return JSON.parse(str);
   }
@@ -651,7 +644,7 @@ more options available via [raw-body](https://github.com/stream-utils/raw-body#g
 var body = yield parse.<span class="apidocCodeKeywordSpan">json</span>(req);
 
 // explicit limit
-var body = yield parse.json(req, { limit: &#x27;10kb&#x27; });
+var body = yield parse.json(req, { limit: '10kb' });
 
 // application/x-www-form-urlencoded
 var body = yield parse.form(req);
@@ -672,25 +665,25 @@ var body = yield parse.form(req);
   opts = utils.clone(opts);
 
   // defaults
-  var len = req.headers[&#x27;content-length&#x27;];
-  var encoding = req.headers[&#x27;content-encoding&#x27;] || &#x27;identity&#x27;;
-  if (len &#x26;&#x26; encoding === &#x27;identity&#x27;) opts.length = ~~len;
-  opts.encoding = opts.encoding || &#x27;utf8&#x27;;
-  opts.limit = opts.limit || &#x27;1mb&#x27;;
+  var len = req.headers['content-length'];
+  var encoding = req.headers['content-encoding'] || 'identity';
+  if (len &amp;&amp; encoding === 'identity') opts.length = ~~len;
+  opts.encoding = opts.encoding || 'utf8';
+  opts.limit = opts.limit || '1mb';
 
   // raw-body returns a Promise when no callback is specified
   return Promise.resolve()
     .then(function() {
       return raw(inflate(req), opts);
     })
-    .then(str =&#x3e; {
+    .then(str =&gt; {
       // ensure return the same format with json / form
       return opts.returnRawBody ? { parsed: str, raw: str } : str;
     });
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 // explicit limit
-var body = yield parse.json(req, { limit: &#x27;10kb&#x27; });
+var body = yield parse.json(req, { limit: '10kb' });
 
 // application/x-www-form-urlencoded
 var body = yield parse.form(req);
@@ -702,7 +695,7 @@ var body = yield parse.<span class="apidocCodeKeywordSpan">text</span>(req);
 var body = yield parse(req);
 
 // custom type
-var body = yield parse(req, { textTypes: [&#x27;text&#x27;, &#x27;html&#x27;] });
+var body = yield parse(req, { textTypes: ['text', 'html'] });
 ```
 ...</pre></li>
     </ul>
@@ -730,11 +723,11 @@ var body = yield parse(req, { textTypes: [&#x27;text&#x27;, &#x27;html&#x27;] })
   if (queryString.allowDots === undefined) queryString.allowDots = true;
 
   // defaults
-  var len = req.headers[&#x27;content-length&#x27;];
-  var encoding = req.headers[&#x27;content-encoding&#x27;] || &#x27;identity&#x27;;
-  if (len &#x26;&#x26; encoding === &#x27;identity&#x27;) opts.length = ~~len;
-  opts.encoding = opts.encoding || &#x27;utf8&#x27;;
-  opts.limit = opts.limit || &#x27;56kb&#x27;;
+  var len = req.headers['content-length'];
+  var encoding = req.headers['content-encoding'] || 'identity';
+  if (len &amp;&amp; encoding === 'identity') opts.length = ~~len;
+  opts.encoding = opts.encoding || 'utf8';
+  opts.limit = opts.limit || '56kb';
   opts.qs = opts.qs || qs;
 
   // raw-body returns a Promise when no callback is specified
@@ -758,7 +751,7 @@ var body = yield parse(req, { textTypes: [&#x27;text&#x27;, &#x27;html&#x27;] })
 var body = yield parse.json(req);
 
 // explicit limit
-var body = yield parse.json(req, { limit: &#x27;10kb&#x27; });
+var body = yield parse.json(req, { limit: '10kb' });
 
 // application/x-www-form-urlencoded
 var body = yield parse.<span class="apidocCodeKeywordSpan">form</span>(req);
@@ -790,11 +783,11 @@ var body = yield parse(req);
   opts = utils.clone(opts);
 
   // defaults
-  var len = req.headers[&#x27;content-length&#x27;];
-  var encoding = req.headers[&#x27;content-encoding&#x27;] || &#x27;identity&#x27;;
-  if (len &#x26;&#x26; encoding === &#x27;identity&#x27;) opts.length = len = ~~len;
-  opts.encoding = opts.encoding || &#x27;utf8&#x27;;
-  opts.limit = opts.limit || &#x27;1mb&#x27;;
+  var len = req.headers['content-length'];
+  var encoding = req.headers['content-encoding'] || 'identity';
+  if (len &amp;&amp; encoding === 'identity') opts.length = len = ~~len;
+  opts.encoding = opts.encoding || 'utf8';
+  opts.limit = opts.limit || '1mb';
   var strict = opts.strict !== false;
 
   // raw-body returns a promise when no callback is specified
@@ -819,7 +812,7 @@ var body = yield parse(req);
     if (!str) return {};
     // strict JSON test
     if (!strictJSONReg.test(str)) {
-      throw new Error(&#x27;invalid JSON, only supports object and array&#x27;);
+      throw new Error('invalid JSON, only supports object and array');
     }
     return JSON.parse(str);
   }
@@ -835,7 +828,7 @@ more options available via [raw-body](https://github.com/stream-utils/raw-body#g
 var body = yield parse.<span class="apidocCodeKeywordSpan">json</span>(req);
 
 // explicit limit
-var body = yield parse.json(req, { limit: &#x27;10kb&#x27; });
+var body = yield parse.json(req, { limit: '10kb' });
 
 // application/x-www-form-urlencoded
 var body = yield parse.form(req);
@@ -861,25 +854,25 @@ var body = yield parse.form(req);
   opts = utils.clone(opts);
 
   // defaults
-  var len = req.headers[&#x27;content-length&#x27;];
-  var encoding = req.headers[&#x27;content-encoding&#x27;] || &#x27;identity&#x27;;
-  if (len &#x26;&#x26; encoding === &#x27;identity&#x27;) opts.length = ~~len;
-  opts.encoding = opts.encoding || &#x27;utf8&#x27;;
-  opts.limit = opts.limit || &#x27;1mb&#x27;;
+  var len = req.headers['content-length'];
+  var encoding = req.headers['content-encoding'] || 'identity';
+  if (len &amp;&amp; encoding === 'identity') opts.length = ~~len;
+  opts.encoding = opts.encoding || 'utf8';
+  opts.limit = opts.limit || '1mb';
 
   // raw-body returns a Promise when no callback is specified
   return Promise.resolve()
     .then(function() {
       return raw(inflate(req), opts);
     })
-    .then(str =&#x3e; {
+    .then(str =&gt; {
       // ensure return the same format with json / form
       return opts.returnRawBody ? { parsed: str, raw: str } : str;
     });
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 // explicit limit
-var body = yield parse.json(req, { limit: &#x27;10kb&#x27; });
+var body = yield parse.json(req, { limit: '10kb' });
 
 // application/x-www-form-urlencoded
 var body = yield parse.form(req);
@@ -891,7 +884,7 @@ var body = yield parse.<span class="apidocCodeKeywordSpan">text</span>(req);
 var body = yield parse(req);
 
 // custom type
-var body = yield parse(req, { textTypes: [&#x27;text&#x27;, &#x27;html&#x27;] });
+var body = yield parse(req, { textTypes: ['text', 'html'] });
 ```
 ...</pre></li>
     </ul>
@@ -948,3 +941,4 @@ var body = yield parse(req, { textTypes: [&#x27;text&#x27;, &#x27;html&#x27;] })
     ]
 </div>
 </div>
+</body></html>
