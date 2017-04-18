@@ -603,9 +603,11 @@ local.templateApidocHtml = '\
                     };
                     // coverage-hack
                     tmp();
-                    tmp.toString = function () {
-                        return text;
-                    };
+                    Object.defineProperties(tmp, { toString: { get: function () {
+                        return function () {
+                            return text;
+                        };
+                    } } });
                 }());
             }
             // normalize moduleMain
@@ -643,6 +645,9 @@ local.templateApidocHtml = '\
             local.apidocModuleDictAdd(options, options.moduleDict);
             // init moduleExtraDict
             local.fs.readdirSync(options.dir).sort().forEach(function (file) {
+                if ((/^(?:\.git|node_modules|tmp)$/).test(file)) {
+                    return;
+                }
                 try {
                     local.fs.readdirSync(options.dir + '/' + file)
                         .sort()
@@ -792,14 +797,13 @@ local.templateApidocHtml = '\
                                 tmp.module,
                                 tmp.module.prototype
                             ].some(function (dict) {
-                                return typeof dict === 'function' ||
-                                    Object.keys(dict || {}).some(function (key) {
-                                        // bug-workaround - buggy electron getter / setter
-                                        try {
-                                            return typeof dict[key] === 'function';
-                                        } catch (ignore) {
-                                        }
-                                    });
+                                return Object.keys(dict || {}).some(function (key) {
+                                    // bug-workaround - buggy electron getter / setter
+                                    try {
+                                        return typeof dict[key] === 'function';
+                                    } catch (ignore) {
+                                    }
+                                });
                             });
                             if (!isModule) {
                                 return;
@@ -2249,6 +2253,7 @@ local.templateApidocHtml = '\
          * this function will get the dbRow's in dbRowList with the given query
          */
             var bb, dbRowDict, result;
+            // optimization - convert to boolean
             not = !!not;
             result = dbRowList;
             if (!(query && typeof query === 'object')) {
@@ -9828,14 +9833,15 @@ local.assetsDict['/assets.index.template.html'].replace((/\n/g), '\\n\\\n') +
         local.assetsDict[\'/assets.example.js\'] =\n\
             local.assetsDict[\'/assets.example.js\'] ||\n\
             local.fs.readFileSync(__filename, \'utf8\');\n\
+        // bug-workaround - long $npm_package_buildCustomOrg\n\
+        /* jslint-ignore-begin */\n\
         local.assetsDict[\'/assets.jslint.rollup.js\'] =\n\
             local.assetsDict[\'/assets.jslint.rollup.js\'] ||\n\
             local.fs.readFileSync(\n\
-                // buildCustomOrg-hack\n\
-                local.jslint.__dirname +\n\
-                    \'/lib.jslint.js\',\n\
+                local.jslint.__dirname + \'/lib.jslint.js\',\n\
                 \'utf8\'\n\
             ).replace((/^#!/), \'//\');\n\
+        /* jslint-ignore-end */\n\
         local.assetsDict[\'/favicon.ico\'] = local.assetsDict[\'/favicon.ico\'] || \'\';\n\
         // if $npm_config_timeout_exit exists,\n\
         // then exit this process after $npm_config_timeout_exit ms\n\
@@ -10301,6 +10307,16 @@ local.assetsDict['/assets.test.template.js'] = '\
 \n\
     // run browser js\-env code - post-init\n\
     case \'browser\':\n\
+        local.testCase_browser_nullCase = local.testCase_browser_nullCase || function (\n\
+            options,\n\
+            onError\n\
+        ) {\n\
+        /*\n\
+         * this function will test browsers\'s null-case handling-behavior-behavior\n\
+         */\n\
+            onError(null, options);\n\
+        };\n\
+\n\
         // run tests\n\
         local.nop(local.modeTest &&\n\
             document.querySelector(\'#testRunButton1\') &&\n\
@@ -11719,11 +11735,10 @@ local.assetsDict['/favicon.ico'] = '';
                         onNext(local._debugTryCatchErrorCaught);
                         return;
                     }
-                    console.error('\nbrowserTest - merging test-report from ' +
-                        options.fileTestReport + '\n');
                     if (!options.modeTestIgnore) {
-                        console.error(local.testReport);
                         local.testReportMerge(local.testReport, data);
+                        console.error('\nbrowserTest - merged test-report from file://' +
+                            options.fileTestReport + '\n');
                     }
                     // create test-report.json
                     local.fs.writeFileSync(
@@ -15087,6 +15102,13 @@ instruction\n\
             local.onReadyBefore();
         };
 
+        local.throwError = function () {
+        /*
+         * this function will throw an error
+         */
+            throw new Error();
+        };
+
         local.timeElapsedPoll = function (options) {
         /*
          * this function will poll options.timeElapsed
@@ -15103,13 +15125,6 @@ instruction\n\
             options = options || {};
             options.timeStart = timeStart || options.timeStart || Date.now();
             return options;
-        };
-
-        local.throwError = function () {
-        /*
-         * this function will throw an error
-         */
-            throw new Error();
         };
 
         local.tryCatchOnError = function (fnc, onError) {
@@ -15509,8 +15524,6 @@ instruction\n\
             local.assetsDict['/assets.utility2.rollup.js'];
         // merge previous test-report
         if (local.env.npm_config_file_test_report_merge) {
-            console.error('merging file://' + local.env.npm_config_file_test_report_merge +
-                ' to test-report');
             local.testReportMerge(
                 local.testReport,
                 JSON.parse(local.tryCatchReadFile(
@@ -15518,6 +15531,8 @@ instruction\n\
                     'utf8'
                 ) || '{}')
             );
+            console.error('\n' + local.env.MODE_BUILD + ' - merged test-report from file://' +
+                local.env.npm_config_file_test_report_merge);
         }
         break;
     }

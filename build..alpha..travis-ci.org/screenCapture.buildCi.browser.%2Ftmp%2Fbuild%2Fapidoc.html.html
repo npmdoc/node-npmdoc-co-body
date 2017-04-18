@@ -101,15 +101,6 @@
 
         <li>
 
-            <a class="apidocElementLiA" href="#apidoc.element.co-body.toString">
-            function <span class="apidocSignatureSpan">co-body.</span>toString
-            <span class="apidocSignatureSpan">()</span>
-            </a>
-
-        </li>
-
-        <li>
-
             <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">co-body.</span>utils</span>
 
         </li>
@@ -150,58 +141,6 @@
             <a class="apidocElementLiA" href="#apidoc.element.co-body.any.text">
             function <span class="apidocSignatureSpan">co-body.any.</span>text
             <span class="apidocSignatureSpan">(req, opts)</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.co-body.form">module co-body.form</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.co-body.form.form">
-            function <span class="apidocSignatureSpan">co-body.</span>form
-            <span class="apidocSignatureSpan">(req, opts)</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.co-body.json">module co-body.json</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.co-body.json.json">
-            function <span class="apidocSignatureSpan">co-body.</span>json
-            <span class="apidocSignatureSpan">(req, opts)</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.co-body.text">module co-body.text</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.co-body.text.text">
-            function <span class="apidocSignatureSpan">co-body.</span>text
-            <span class="apidocSignatureSpan">(req, opts)</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.co-body.toString">module co-body.toString</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.co-body.toString.toString">
-            function <span class="apidocSignatureSpan">co-body.</span>toString
-            <span class="apidocSignatureSpan">()</span>
             </a>
 
         </li>
@@ -471,21 +410,6 @@ var body = yield parse(req, { textTypes: ['text', 'html'] });
 
 
 
-    <h2>
-        <a href="#apidoc.element.co-body.toString" id="apidoc.element.co-body.toString">
-        function <span class="apidocSignatureSpan">co-body.</span>toString
-        <span class="apidocSignatureSpan">()</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">toString = function () {
-    return text;
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
-    </ul>
-
-
-
 
 </div>
 
@@ -704,213 +628,6 @@ var body = yield parse(req, { textTypes: ['text', 'html'] });
 </div>
 
 <div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.co-body.form" id="apidoc.module.co-body.form">module co-body.form</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.co-body.form.form" id="apidoc.element.co-body.form.form">
-        function <span class="apidocSignatureSpan">co-body.</span>form
-        <span class="apidocSignatureSpan">(req, opts)</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">form = function (req, opts){
-  req = req.req || req;
-  opts = utils.clone(opts);
-  var queryString = opts.queryString || {};
-
-  // keep compatibility with qs@4
-  if (queryString.allowDots === undefined) queryString.allowDots = true;
-
-  // defaults
-  var len = req.headers['content-length'];
-  var encoding = req.headers['content-encoding'] || 'identity';
-  if (len &amp;&amp; encoding === 'identity') opts.length = ~~len;
-  opts.encoding = opts.encoding || 'utf8';
-  opts.limit = opts.limit || '56kb';
-  opts.qs = opts.qs || qs;
-
-  // raw-body returns a Promise when no callback is specified
-  return Promise.resolve()
-    .then(function() {
-      return raw(inflate(req), opts);
-    })
-    .then(function(str){
-      try {
-        var parsed = opts.qs.parse(str, queryString);
-        return opts.returnRawBody ? { parsed: parsed, raw: str } : parsed;
-      } catch (err) {
-        err.status = 400;
-        err.body = str;
-        throw err;
-      }
-    });
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-// application/json
-var body = yield parse.json(req);
-
-// explicit limit
-var body = yield parse.json(req, { limit: '10kb' });
-
-// application/x-www-form-urlencoded
-var body = yield parse.<span class="apidocCodeKeywordSpan">form</span>(req);
-
-// text/plain
-var body = yield parse.text(req);
-
-// either
-var body = yield parse(req);
-...</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.co-body.json" id="apidoc.module.co-body.json">module co-body.json</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.co-body.json.json" id="apidoc.element.co-body.json.json">
-        function <span class="apidocSignatureSpan">co-body.</span>json
-        <span class="apidocSignatureSpan">(req, opts)</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">json = function (req, opts){
-  req = req.req || req;
-  opts = utils.clone(opts);
-
-  // defaults
-  var len = req.headers['content-length'];
-  var encoding = req.headers['content-encoding'] || 'identity';
-  if (len &amp;&amp; encoding === 'identity') opts.length = len = ~~len;
-  opts.encoding = opts.encoding || 'utf8';
-  opts.limit = opts.limit || '1mb';
-  var strict = opts.strict !== false;
-
-  // raw-body returns a promise when no callback is specified
-  return Promise.resolve()
-    .then(function() {
-      return raw(inflate(req), opts);
-    })
-    .then(function(str) {
-      try {
-        var parsed = parse(str);
-        return opts.returnRawBody ? { parsed: parsed, raw: str } : parsed;
-      } catch (err) {
-        err.status = 400;
-        err.body = str;
-        throw err;
-      }
-    });
-
-  function parse(str){
-    if (!strict) return str ? JSON.parse(str) : str;
-    // strict mode always return object
-    if (!str) return {};
-    // strict JSON test
-    if (!strictJSONReg.test(str)) {
-      throw new Error('invalid JSON, only supports object and array');
-    }
-    return JSON.parse(str);
-  }
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-
-more options available via [raw-body](https://github.com/stream-utils/raw-body#getrawbodystream-options-callback):
-
-## Example
-
-```js
-// application/json
-var body = yield parse.<span class="apidocCodeKeywordSpan">json</span>(req);
-
-// explicit limit
-var body = yield parse.json(req, { limit: '10kb' });
-
-// application/x-www-form-urlencoded
-var body = yield parse.form(req);
-...</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.co-body.text" id="apidoc.module.co-body.text">module co-body.text</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.co-body.text.text" id="apidoc.element.co-body.text.text">
-        function <span class="apidocSignatureSpan">co-body.</span>text
-        <span class="apidocSignatureSpan">(req, opts)</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">text = function (req, opts){
-  req = req.req || req;
-  opts = utils.clone(opts);
-
-  // defaults
-  var len = req.headers['content-length'];
-  var encoding = req.headers['content-encoding'] || 'identity';
-  if (len &amp;&amp; encoding === 'identity') opts.length = ~~len;
-  opts.encoding = opts.encoding || 'utf8';
-  opts.limit = opts.limit || '1mb';
-
-  // raw-body returns a Promise when no callback is specified
-  return Promise.resolve()
-    .then(function() {
-      return raw(inflate(req), opts);
-    })
-    .then(str =&gt; {
-      // ensure return the same format with json / form
-      return opts.returnRawBody ? { parsed: str, raw: str } : str;
-    });
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-// explicit limit
-var body = yield parse.json(req, { limit: '10kb' });
-
-// application/x-www-form-urlencoded
-var body = yield parse.form(req);
-
-// text/plain
-var body = yield parse.<span class="apidocCodeKeywordSpan">text</span>(req);
-
-// either
-var body = yield parse(req);
-
-// custom type
-var body = yield parse(req, { textTypes: ['text', 'html'] });
-```
-...</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.co-body.toString" id="apidoc.module.co-body.toString">module co-body.toString</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.co-body.toString.toString" id="apidoc.element.co-body.toString.toString">
-        function <span class="apidocSignatureSpan">co-body.</span>toString
-        <span class="apidocSignatureSpan">()</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.co-body.utils" id="apidoc.module.co-body.utils">module co-body.utils</a></h1>
 
 
@@ -929,7 +646,23 @@ var body = yield parse(req, { textTypes: ['text', 'html'] });
   }
   return options;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ * @param {Options} [opts]
+ * @return {Function}
+ * @api public
+ */
+
+module.exports = function(req, opts){
+req = req.req || req;
+opts = utils.<span class="apidocCodeKeywordSpan">clone</span>(opts);
+var queryString = opts.queryString || {};
+
+// keep compatibility with qs@4
+if (queryString.allowDots === undefined) queryString.allowDots = true;
+
+// defaults
+var len = req.headers['content-length'];
+...</pre></li>
     </ul>
 
 
